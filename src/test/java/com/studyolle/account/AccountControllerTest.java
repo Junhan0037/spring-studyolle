@@ -9,8 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -24,7 +23,8 @@ class AccountControllerTest {
         mockMvc.perform(get("/sign-up"))
                 .andDo(print()) // view 내용 보기
                 .andExpect(status().isOk()) // 상태 확인
-                .andExpect(view().name("account/sign-up")); // view 파일 확인
+                .andExpect(view().name("account/sign-up")) // view 파일 확인
+                .andExpect(model().attributeExists("signUpForm")); // model 확인
     }
 
 }
