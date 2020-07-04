@@ -67,6 +67,7 @@ class AccountControllerTest {
         Account account = accountRepository.findByEmail("junhan@email.com");
         assertNotNull(account);
         assertNotEquals(account.getPassword(), "12345678"); // 인코딩 되어 같은 값이 나오지 않는다
+        assertNotNull(account.getEmailCheckToken());
         then(javaMailSender).should().send(any(SimpleMailMessage.class)); // send가 호출이 되었는지 확인
     }
 
