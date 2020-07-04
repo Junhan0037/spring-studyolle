@@ -22,11 +22,11 @@ public class Account { // 계정
 
     private String password;
 
-    private boolean emailVerified;
+    private boolean emailVerified; // 이메일 인증
 
-    private String emailCheckToken;
+    private String emailCheckToken; // 이메일 인증 토큰
 
-    private LocalDateTime joinedAt;
+    private LocalDateTime joinedAt; // 가입 날짜
 
     private String bio;
 
@@ -52,7 +52,7 @@ public class Account { // 계정
 
     private boolean studyUpdatedByWeb;
 
-    public void generateEmailCheckToken() {
+    public void generateEmailCheckToken() { // 이메일 인증 토큰 생성
         this.emailCheckToken = UUID.randomUUID().toString();
     }
 

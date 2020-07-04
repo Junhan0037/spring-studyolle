@@ -13,7 +13,7 @@ import java.io.InputStream;
 
 @Profile("local")
 @Component
-@Slf4j
+@Slf4j // Logging
 public class ConsoleMailSender implements JavaMailSender {
 
     @Override
