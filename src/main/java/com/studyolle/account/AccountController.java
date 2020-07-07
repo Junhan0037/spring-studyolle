@@ -56,8 +56,7 @@ public class AccountController {
             return view;
         }
 
-        account.completeSignUp(); // 메일 인증 상태로 변환
-        accountService.login(account);
+        accountService.completeSignUp(account);
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
         return view;
