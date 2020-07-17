@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Data
-public class SignUpForm {
+public class SignUpForm { // 회원가입시 받아올 데이터
 
     @NotBlank
     @Length(min = 3, max = 20)

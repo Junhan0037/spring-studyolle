@@ -39,7 +39,7 @@ public class AccountService implements UserDetailsService {
         Account account = Account.builder()
                 .email(signUpForm.getEmail())
                 .nickname(signUpForm.getNickname())
-                .password(passwordEncoder.encode(signUpForm.getPassword()))
+                .password(passwordEncoder.encode(signUpForm.getPassword())) // 패스워드 인코딩
                 .studyCreatedByWeb(true)
                 .studyEnrollmentResultByWeb(true)
                 .studyUpdatedByWeb(true)
@@ -50,18 +50,23 @@ public class AccountService implements UserDetailsService {
     public void sendSignUpConfirmEmail(Account newAccount) {
         SimpleMailMessage mailMessage = new SimpleMailMessage(); // 회원 인증 메일 보내기
         mailMessage.setTo(newAccount.getEmail());
-        mailMessage.setSubject("스터디올래, 회원 가입 인증");
+        mailMessage.setSubject("스터디올래, 회원 가입 인증"); // 메일 제목
         mailMessage.setText("/check-email-token?token=" + newAccount.getEmailCheckToken() + "&email=" + newAccount.getEmail());
         javaMailSender.send(mailMessage);
     }
 
-    public void login(Account account) {
+    public void login(Account account) { // 로그인
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 new UserAccount(account),
                 account.getPassword(),
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")) // List.of(~)
         );
         SecurityContextHolder.getContext().setAuthentication(token);
+
+//        UsernamePasswordAuthenticationToken toekn = new UsernamePasswordAuthenticationToken(username, password);
+//        Authentication authentication = authenticationManager.authenticate(token);
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        context.setAuthentication(authentication);
     }
 
     @Transactional(readOnly = true)
@@ -81,15 +86,15 @@ public class AccountService implements UserDetailsService {
 
     public void completeSignUp(Account account) {
         account.completeSignUp(); // 메일 인증 상태로 변환
-        login(account);
+        login(account); // 로그인
     }
 
-    public void updateProfile(Account account, Profile profile) {
+    public void updateProfile(Account account, Profile profile) { // 프로필 수정
         account.setUrl(profile.getUrl());
         account.setOccupation(profile.getOccupation());
         account.setLocation(profile.getLocation());
         account.setBio(profile.getBio());
-        accountRepository.save(account); // 영속성 컨텍스트
+        accountRepository.save(account); // 영속성 컨텍스트의 detach상태이기 때문에 save를 통해 DB에 전송
     }
 
 }

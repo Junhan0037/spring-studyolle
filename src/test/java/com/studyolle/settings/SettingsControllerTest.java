@@ -2,7 +2,6 @@ package com.studyolle.settings;
 
 import com.studyolle.WithAccount;
 import com.studyolle.account.AccountRepository;
-import com.studyolle.account.AccountService;
 import com.studyolle.domain.Account;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,10 +29,20 @@ class SettingsControllerTest {
 
     @AfterEach
     void afterEach() {
-        accountRepository.deleteAll();
+        accountRepository.deleteAll(); // @WithAccount에서 생성한 계정을 지워준다
     }
 
-    @WithAccount("junhan")
+//    @BeforeEach
+//    void beforeEach() {
+//        SignUpForm signUpForm = new SignUpForm();
+//        signUpForm.setNickname("junhan");
+//        signUpForm.setEmail("junhan@email.com");
+//        signUpForm.setPassword("123456789");
+//        accountService.processNewAccount(signUpForm);
+//    }
+//
+//    @WithUserDetails(value = "junhan", setupBefore = TestExecutionEvent.TEST_EXECUTION) // 버그가 있어서 설정이 안됨 (@BeforeEach 다음, 테스트코드 실행 전에 실행)
+    @WithAccount("junhan") // 이름에 해당하는 계정을 만든다
     @DisplayName("프로필 수정 폼")
     @Test
     void updateProfileForm() throws Exception {

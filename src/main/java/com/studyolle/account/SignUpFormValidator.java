@@ -7,7 +7,7 @@ import org.springframework.validation.Validator;
 
 @Component
 @RequiredArgsConstructor
-public class SignUpFormValidator implements Validator {
+public class SignUpFormValidator implements Validator { // @Valid 호출시 실행
 
     private final AccountRepository accountRepository;
 

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Getter @Setter @EqualsAndHashCode(of = "id")
+@Getter @Setter @EqualsAndHashCode(of = "id") // 연관관계에서 상호참조하면서 stackoverflow가 발생하는걸 방지한다.
 @Builder @AllArgsConstructor @NoArgsConstructor
 public class Account { // 계정
 
@@ -30,16 +30,16 @@ public class Account { // 계정
 
     private LocalDateTime joinedAt; // 가입 날짜
 
-    private String bio;
+    private String bio; // 소개글
 
-    private String url;
+    private String url; // URL
 
-    private String occupation;
+    private String occupation; // 직업
 
-    private String location;
+    private String location; // 지역
 
-    @Lob @Basic(fetch = FetchType.EAGER)
-    // @Lob : 텍스트 타입 매핑, @Basic(fetch = FetchType.EAGER) : 즉시 로딩
+    @Lob  // 텍스트 타입 매핑
+    @Basic(fetch = FetchType.EAGER) // 즉시 로딩
     private String profileImage;
 
     private boolean studyCreatedByEmail;

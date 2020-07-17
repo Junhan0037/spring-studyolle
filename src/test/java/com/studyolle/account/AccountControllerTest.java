@@ -31,8 +31,7 @@ class AccountControllerTest {
 
     @Autowired private AccountRepository accountRepository;
 
-    @MockBean
-    JavaMailSender javaMailSender;
+    @MockBean JavaMailSender javaMailSender;
 
     @DisplayName("인증 메일 확인 - 입력값 오류")
     @Test
@@ -100,7 +99,7 @@ class AccountControllerTest {
                 .param("email", "junhan@email.com")
                 .param("password", "12345678")
                 .with(csrf()))
-                .andExpect(status().is3xxRedirection()) // redirect 기대
+                .andExpect(status().is3xxRedirection()) // redirect
                 .andExpect(view().name("redirect:/"))
                 .andExpect(authenticated().withUsername("junhan"));
 

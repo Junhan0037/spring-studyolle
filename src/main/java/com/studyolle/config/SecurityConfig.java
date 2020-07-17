@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .mvcMatchers("/node_modules/**")
+                .mvcMatchers("/node_modules/**") // 프론트엔드 라이브러리 (npm) 권한 설정
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()); // static resource 인증 X (이미지 등)
     }
 

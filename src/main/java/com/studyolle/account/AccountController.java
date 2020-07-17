@@ -18,7 +18,7 @@ public class AccountController {
     private final AccountService accountService;
     private final AccountRepository accountRepository;
 
-    @InitBinder("signUpForm")
+    @InitBinder("signUpForm") // signUpForm이 불러지면 signUpFormValidator에서 검증한다.
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(signUpFormValidator); // 커스텀 검증
     }
@@ -36,7 +36,7 @@ public class AccountController {
         }
 
         Account account = accountService.processNewAccount(signUpForm);
-        accountService.login(account);
+        accountService.login(account); // 로그인
 
         return "redirect:/";
     }
@@ -56,7 +56,7 @@ public class AccountController {
             return view;
         }
 
-        accountService.completeSignUp(account);
+        accountService.completeSignUp(account); // 이메일 승인 상태로 변환, 로그인
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
         return view;
