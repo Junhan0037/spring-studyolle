@@ -18,7 +18,7 @@ public class AccountController {
     private final AccountService accountService;
     private final AccountRepository accountRepository;
 
-    @InitBinder("signUpForm") // signUpForm이 불러지면 signUpFormValidator에서 검증한다.
+    @InitBinder("signUpForm") // signUpForm이 불러지면 SignUpFormValidator()에서 검증한다.
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(signUpFormValidator); // 커스텀 검증
     }

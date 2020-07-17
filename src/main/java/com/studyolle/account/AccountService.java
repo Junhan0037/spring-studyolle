@@ -98,4 +98,9 @@ public class AccountService implements UserDetailsService {
         accountRepository.save(account); // 영속성 컨텍스트의 detach상태이기 때문에 save를 통해 DB에 전송
     }
 
+    public void updatePassword(Account account, String newPassword) { // 패스워드 수정
+        account.setPassword(passwordEncoder.encode(newPassword));
+        accountRepository.save(account);
+    }
+
 }
