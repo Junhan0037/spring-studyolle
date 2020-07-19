@@ -4,6 +4,7 @@ import com.studyolle.account.AccountService;
 import com.studyolle.account.CurrentUser;
 import com.studyolle.domain.Account;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -20,26 +21,25 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class SettingsController {
 
+    static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile";
+    static final String SETTINGS_PROFILE_URL = "/settings/profile";
+    static final String SETTINGS_PASSWORD_VIEW_NAME = "settings/password";
+    static final String SETTINGS_PASSWORD_URL = "/settings/password";
+    static final String SETTINGS_NOTIFICATIONS_VIEW_NAME = "settings/notifications";
+    static final String SETTINGS_NOTIFICATIONS_URL = "/settings/notifications";
+
+    private final AccountService accountService;
+    private final ModelMapper modelmapper;
+
     @InitBinder("passwordForm") // passwordForm이 불러지면 PasswordFormValidator()에서 검증한다.
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(new PasswordFormValidator()); // 커스텀 검증
     }
 
-    static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile";
-    static final String SETTINGS_PROFILE_URL = "/settings/profile";
-
-    static final String SETTINGS_PASSWORD_VIEW_NAME = "settings/password";
-    static final String SETTINGS_PASSWORD_URL = "/settings/password";
-
-    static final String SETTINGS_NOTIFICATIONS_VIEW_NAME = "settings/notifications";
-    static final String SETTINGS_NOTIFICATIONS_URL = "/settings/notifications";
-
-    private final AccountService accountService;
-
     @GetMapping(SETTINGS_PROFILE_URL)
     public String updateProfileUpdateForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(new Profile(account));
+        model.addAttribute(modelmapper.map(account, Profile.class)); // model.addAttribute(new Profile(account));
         return SETTINGS_PROFILE_VIEW_NAME;
     }
 
@@ -80,7 +80,7 @@ public class SettingsController {
     @GetMapping(SETTINGS_NOTIFICATIONS_URL)
     public String updateNotificationsForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(new Notifications(account));
+        model.addAttribute(modelmapper.map(account, Notifications.class)); // model.addAttribute(new Notifications(account));
         return SETTINGS_NOTIFICATIONS_VIEW_NAME;
     }
 
