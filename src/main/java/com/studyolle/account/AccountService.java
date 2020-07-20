@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.validation.Valid;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @Transactional
@@ -62,8 +63,9 @@ public class AccountService implements UserDetailsService {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 new UserAccount(account),
                 account.getPassword(),
-                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")) // List.of(~)
+                List.of(new SimpleGrantedAuthority("ROLE_USER"))
         );
+
         SecurityContextHolder.getContext().setAuthentication(token);
 
 //        UsernamePasswordAuthenticationToken toekn = new UsernamePasswordAuthenticationToken(username, password);
