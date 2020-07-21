@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -35,22 +34,16 @@ public class AccountService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
-    public Account processNewAccount(SignUpForm signUpForm) { // 작업 순서
+    public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm); // 폼의 내용으로 회원 가입
-        newAccount.generateEmailCheckToken(); // 이메일 확인하는 토큰 생성
         sendSignUpConfirmEmail(newAccount); // 가입 확인 이메일 보내기
         return newAccount;
     }
 
     private Account saveNewAccount(@ModelAttribute @Valid SignUpForm signUpForm) {
-        Account account = Account.builder()
-                .email(signUpForm.getEmail())
-                .nickname(signUpForm.getNickname())
-                .password(passwordEncoder.encode(signUpForm.getPassword())) // 패스워드 인코딩
-                .studyCreatedByWeb(true)
-                .studyEnrollmentResultByWeb(true)
-                .studyUpdatedByWeb(true)
-                .build();
+        signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
+        Account account = modelMapper.map(signUpForm, Account.class);
+        account.generateEmailCheckToken(); // 이메일 확인 토큰 생성
         return accountRepository.save(account);
     }
 
