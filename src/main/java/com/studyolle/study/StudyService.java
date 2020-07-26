@@ -4,6 +4,7 @@ import com.studyolle.domain.Account;
 import com.studyolle.domain.Study;
 import com.studyolle.domain.Tag;
 import com.studyolle.domain.Zone;
+import com.studyolle.study.event.StudyCreatedEvent;
 import com.studyolle.study.event.StudyUpdateEvent;
 import com.studyolle.study.form.StudyDescriptionForm;
 import lombok.RequiredArgsConstructor;
@@ -97,6 +98,33 @@ public class StudyService {
 
     public void removeZone(Study study, Zone zone) {
         study.getZones().remove(zone);
+    }
+
+    public Study getStudyToUpdateStatus(Account account, String path) {
+        Study study = repository.findStudyWithManagersByPath(path);
+        checkIfExistingStudy(path, study);
+        checkIfManager(account, study);
+        return study;
+    }
+
+    public void publish(Study study) {
+        study.publish();
+        this.eventPublisher.publishEvent(new StudyCreatedEvent(study));
+    }
+
+    public void close(Study study) {
+        study.close();
+        eventPublisher.publishEvent(new StudyUpdateEvent(study, "스터디를 종료했습니다."));
+    }
+
+    public void startRecruit(Study study) {
+        study.startRecruit();
+        eventPublisher.publishEvent(new StudyUpdateEvent(study, "팀원 모집을 시작합니다."));
+    }
+
+    public void stopRecruit(Study study) {
+        study.stopRecruit();
+        eventPublisher.publishEvent(new StudyUpdateEvent(study, "팀원 모집을 중단했습니다."));
     }
 
 }
