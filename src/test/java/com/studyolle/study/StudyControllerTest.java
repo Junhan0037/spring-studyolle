@@ -1,9 +1,11 @@
 package com.studyolle.study;
 
 import com.studyolle.WithAccount;
+import com.studyolle.account.AccountFactory;
 import com.studyolle.account.AccountRepository;
 import com.studyolle.domain.Account;
 import com.studyolle.domain.Study;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +24,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
+@RequiredArgsConstructor
 class StudyControllerTest {
 
     @Autowired MockMvc mockMvc;
     @Autowired AccountRepository accountRepository;
     @Autowired StudyRepository studyRepository;
     @Autowired StudyService studyService;
+    @Autowired AccountFactory accountFactory;
+    @Autowired StudyFactory studyFactory;
 
     @Test
     @WithAccount("junhan")
@@ -95,6 +100,37 @@ class StudyControllerTest {
                 .andExpect(view().name("study/view"))
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("study"));
+    }
+
+    @Test
+    @WithAccount("junhan")
+    @DisplayName("스터디 가입")
+    void joinStudy() throws Exception {
+        Account whiteship = accountFactory.createAccount("whiteship");
+        Study study = studyFactory.createStudy("test-study", whiteship);
+
+        mockMvc.perform(get("/study/" + study.getPath() + "/join"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/study/" + study.getPath() + "/members"));
+
+        Account junhan = accountRepository.findByNickname("junhan");
+        assertTrue(study.getMembers().contains(junhan));
+    }
+
+    @Test
+    @WithAccount("junhan")
+    @DisplayName("스터디 탈퇴")
+    void leaveStudy() throws Exception {
+        Account whiteship = accountFactory.createAccount("whiteship");
+        Study study = studyFactory.createStudy("test-study", whiteship);
+        Account junhan = accountRepository.findByNickname("junhan");
+        studyService.addMember(study, junhan);
+
+        mockMvc.perform(get("/study/" + study.getPath() + "/leave"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/study/" + study.getPath() + "/members"));
+
+        assertFalse(study.getMembers().contains(junhan));
     }
 
 }
