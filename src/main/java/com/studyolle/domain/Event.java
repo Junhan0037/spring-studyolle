@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,7 +50,8 @@ public class Event {
     private Integer limitOfEnrollments;
 
     @OneToMany(mappedBy = "event") // 양방향 관계
-    private List<Enrollment> enrollments;
+    @OrderBy("enrolledAt")
+    private List<Enrollment> enrollments = new ArrayList<>();;
 
     @Enumerated(EnumType.STRING)
     private EventType eventType;
@@ -84,6 +86,9 @@ public class Event {
     private boolean isAlreadyEnrolled(UserAccount userAccount) {
         Account account = userAccount.getAccount();
         for (Enrollment e : this.enrollments) {
+            System.out.println("=============================");
+            System.out.println(e.getAccount());
+            System.out.println("=============================");
             if (e.getAccount().equals(account)) {
                 return true;
             }
@@ -95,7 +100,7 @@ public class Event {
         return this.enrollments.stream().filter(Enrollment::isAccepted).count();
     }
 
-    public void addEnrollment(Enrollment enrollment) {
+    public void addEnrollment(Enrollment enrollment) { // 연관관계
         this.enrollments.add(enrollment);
         enrollment.setEvent(this);
     }

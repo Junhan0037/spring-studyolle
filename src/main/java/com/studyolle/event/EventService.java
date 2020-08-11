@@ -1,6 +1,7 @@
 package com.studyolle.event;
 
 import com.studyolle.domain.Account;
+import com.studyolle.domain.Enrollment;
 import com.studyolle.domain.Event;
 import com.studyolle.domain.Study;
 import com.studyolle.event.form.EventForm;
@@ -18,6 +19,7 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final ModelMapper modelMapper;
+    private final EnrollmentRepository enrollmentRepository;
 
     public Event createEvent(Event event, Study study, Account account) {
         event.setCreatedBy(account);
@@ -36,6 +38,26 @@ public class EventService {
     public void deleteEvent(Event event) {
         eventRepository.delete(event);
 //        eventPublisher.publishEvent(new StudyUpdateEvent(event.getStudy(), "'" + event.getTitle() + "' 모임을 취소했습니다."));
+    }
+
+    public void newEnrollment(Event event, Account account) {
+        if (!enrollmentRepository.existsByEventAndAccount(event, account)) {
+            Enrollment enrollment = new Enrollment();
+            enrollment.setEnrolledAt(LocalDateTime.now());
+            enrollment.setAccepted(event.isAbleToAcceptWaitingEnrollment());
+            enrollment.setAccount(account);
+            event.addEnrollment(enrollment);
+            enrollmentRepository.save(enrollment);
+        }
+    }
+
+    public void cancelEnrollment(Event event, Account account) {
+        Enrollment enrollment = enrollmentRepository.findByEventAndAccount(event, account);
+        if (!enrollment.isAttended()) {
+            event.removeEnrollment(enrollment); // 관계 끊기
+            enrollmentRepository.delete(enrollment); // 삭제
+            event.acceptNextWaitingEnrollment(); // 대기자를 확정상태로 변환
+        }
     }
 
 }
