@@ -1,5 +1,6 @@
 package com.studyolle.modules.event;
 
+import com.studyolle.infra.MockMvcTest;
 import com.studyolle.modules.account.WithAccount;
 import com.studyolle.modules.account.AccountFactory;
 import com.studyolle.modules.account.AccountRepository;
@@ -10,7 +11,6 @@ import com.studyolle.modules.study.StudyFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -21,11 +21,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+@MockMvcTest
 class EventControllerTest extends AbstractContainerBaseTest {
 
-    @Autowired
-    MockMvc mockMvc;
+    @Autowired MockMvc mockMvc;
     @Autowired StudyFactory studyFactory;
     @Autowired AccountFactory accountFactory;
     @Autowired EventService eventService;

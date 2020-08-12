@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
 @RequiredArgsConstructor
-public class WithAccountSercurityContextFactory implements WithSecurityContextFactory<WithAccount> {
+public class WithAccountSecurityContextFactory implements WithSecurityContextFactory<WithAccount> {
 
     private final AccountService accountService;
 
