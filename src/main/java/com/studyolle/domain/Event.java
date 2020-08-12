@@ -161,8 +161,7 @@ public class Event {
     }
 
     public void accept(Enrollment enrollment) {
-        if (this.eventType == EventType.CONFIRMATIVE
-                && this.limitOfEnrollments > this.getNumberOfAcceptedEnrollments()) {
+        if (this.eventType == EventType.CONFIRMATIVE && this.limitOfEnrollments > this.getNumberOfAcceptedEnrollments()) {
             enrollment.setAccepted(true);
         }
     }

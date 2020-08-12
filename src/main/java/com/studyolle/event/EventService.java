@@ -7,6 +7,7 @@ import com.studyolle.domain.Study;
 import com.studyolle.event.form.EventForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ public class EventService {
     private final EventRepository eventRepository;
     private final ModelMapper modelMapper;
     private final EnrollmentRepository enrollmentRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public Event createEvent(Event event, Study study, Account account) {
         event.setCreatedBy(account);
@@ -58,6 +60,24 @@ public class EventService {
             enrollmentRepository.delete(enrollment); // 삭제
             event.acceptNextWaitingEnrollment(); // 대기자를 확정상태로 변환
         }
+    }
+
+    public void acceptEnrollment(Event event, Enrollment enrollment) {
+        event.accept(enrollment);
+//        eventPublisher.publishEvent(new EnrollmentAcceptedEvent(enrollment));
+    }
+
+    public void rejectEnrollment(Event event, Enrollment enrollment) {
+        event.reject(enrollment);
+//        eventPublisher.publishEvent(new EnrollmentRejectedEvent(enrollment));
+    }
+
+    public void checkInEnrollment(Enrollment enrollment) {
+        enrollment.setAttended(true);
+    }
+
+    public void cancelCheckInEnrollment(Enrollment enrollment) {
+        enrollment.setAttended(false);
     }
 
 }
