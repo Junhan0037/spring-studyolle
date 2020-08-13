@@ -5,9 +5,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class StudyCreatedEvent {
 
-    private final Study study;
+//    private final Study study;
+    private Study study;
+
+    public StudyCreatedEvent(Study study) {
+        this.study = study;
+    }
 
 }
