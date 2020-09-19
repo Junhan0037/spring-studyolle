@@ -68,6 +68,7 @@ public class SettingsController {
     public String updateProfileForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(modelmapper.map(account, Profile.class)); // model.addAttribute(new Profile(account));
+        Profile profile = modelmapper.map(account, Profile.class);
         return SETTINGS + PROFILE;
     }
 
