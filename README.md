@@ -1,4 +1,4 @@
-# spring-studyolle
+# spring-studyolle ![Java_11](https://img.shields.io/badge/java-v11-red?logo=java) ![Spring_Boot](https://img.shields.io/badge/Spring_Boot-v2.2.4-green.svg?logo=spring)
 
 스터디를 만들고 모임을 관리하는 웹 애플리케이션
 
@@ -10,7 +10,7 @@
 * Git Tools : Source Tree
 * OS : Windows10
 * SpringBoot 2.2.4
-* Java8
+* Java11
 * Maven
 
 <img src="src/main/resources/static/images/tool.png" width="300px" height="247px" title="툴" alt="capture"></img><br/>
